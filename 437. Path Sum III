@@ -1,0 +1,62 @@
+/*  437. Path Sum III
+ *You are given a binary tree in which each node contains an integer value.
+
+ *Find the number of paths that sum to a given value.
+
+ *The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
+
+ *The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000.
+
+ *Example:
+
+ *root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+     10
+    /  \
+   5   -3
+  / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+ *Return 3. The paths that sum to 8 are:
+
+ *1.  5 -> 3
+ *2.  5 -> 2 -> 1
+ *3. -3 -> 11
+
+
+answer-first-1
+7-12-5
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    
+    int pathSum(TreeNode* root, int sum) {
+        if(!root) return 0;
+        return notesum(root,sum)+pathSum(root->left,sum)+pathSum(root->right,sum);
+
+    }
+    int notesum(TreeNode* root,int sum)
+    {
+        if(!root) return 0;
+         return (root->val==sum)+notesum(root->left,sum-root->val)+notesum(root->right,sum-root->val);
+        
+    }
+};
+/* need notice.
+   这个题目可以使用递归的方式来解决。其中需要创建一个notesum() 函数 用来得到以该节点为第一个节点的情况下满足条件的个数,然后使用递归算法来
+    遍历每一个节点各得到节点满足条件的个数，最后相加。
+    还有 要考虑到 1. 负数的情况，负数是可以相加的，所以如果出现root->val>sum 的情况，并不能判定这个节点不再满足条件。
+    例如：sum-8,  但9+(-1)=8。
+                 2. 多个数相加，比如 sum=8, 5+3 满足，但是 5+3+4-4 也是满足情况的的。所以在解决的时候要加到叶子结点才能结束。
+*/                 
+                 
